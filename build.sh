@@ -52,7 +52,8 @@ if [[ "${SHOULD_BUILD}" == "yes" ]]; then
   else # linux
     # in CI, packaging will be done by a different job
     if [[ "${CI_BUILD}" == "no" ]]; then
-      yarn gulp "vscode-linux-${VSCODE_ARCH}-min-ci"
+      [ -f .stamp_vscode-linux-${VSCODE_ARCH}-min-ci ] || yarn gulp "vscode-linux-${VSCODE_ARCH}-min-ci"
+      touch .stamp_vscode-linux-${VSCODE_ARCH}-min-ci
 
       find "../VSCode-linux-${VSCODE_ARCH}" -print0 | xargs -0 touch -c
     fi
@@ -61,14 +62,20 @@ if [[ "${SHOULD_BUILD}" == "yes" ]]; then
   fi
 
   if [[ "${SHOULD_BUILD_REH}" != "no" ]]; then
-    yarn gulp minify-vscode-reh
-    yarn gulp "vscode-reh-${VSCODE_PLATFORM}-${VSCODE_ARCH}-min-ci"
+    [ -f .stamp_minify-vscode-reh ] || yarn gulp minify-vscode-reh
+    touch .stamp_minify-vscode-reh
+    [ -f .stamp_vscode-reh-${VSCODE_PLATFORM}-${VSCODE_ARCH}-min-ci ] || yarn gulp "vscode-reh-${VSCODE_PLATFORM}-${VSCODE_ARCH}-min-ci"
+    touch .stamp_vscode-reh-${VSCODE_PLATFORM}-${VSCODE_ARCH}-min-ci
   fi
 
   if [[ "${SHOULD_BUILD_REH_WEB}" != "no" ]]; then
-    yarn gulp minify-vscode-reh-web
-    yarn gulp "vscode-reh-web-${VSCODE_PLATFORM}-${VSCODE_ARCH}-min-ci"
+    [ -f .stamp_minify-vscode-reh-web ] || yarn gulp minify-vscode-reh-web
+    touch .stamp_minify-vscode-reh-web
+    [ -f .stamp_vscode-reh-web-${VSCODE_PLATFORM}-${VSCODE_ARCH}-min-ci ] || yarn gulp "vscode-reh-web-${VSCODE_PLATFORM}-${VSCODE_ARCH}-min-ci"
+    touch .stamp_vscode-reh-web-${VSCODE_PLATFORM}-${VSCODE_ARCH}-min-ci
   fi
 
   cd ..
 fi
+
+touch .stamp_assets

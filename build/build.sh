@@ -89,7 +89,7 @@ if [[ "${SKIP_SOURCE}" == "no" ]]; then
   echo "RELEASE_VERSION=\"${RELEASE_VERSION}\"" >> build.env
   echo "BUILD_SOURCEVERSION=\"${BUILD_SOURCEVERSION}\"" >> build.env
 else
-  if [[ "${SKIP_ASSETS}" != "no" ]]; then
+  if [[ "${SKIP_ASSETS}" != "no" && ! -f .stamp_assets ]]; then
     rm -rf vscode-* VSCode-*
   fi
 
