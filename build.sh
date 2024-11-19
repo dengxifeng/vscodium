@@ -13,6 +13,13 @@ if [[ "${SHOULD_BUILD}" == "yes" ]]; then
 
   cd vscode || { echo "'vscode' dir not found"; exit 1; }
 
+  if [ ! -f .stamp_patched ]; then
+    echo "" >> build/checksums/electron.txt
+    cat ../electron_linux_riscv64.sha256sums >> build/checksums/electron.txt
+    sed -i 's/target="20.18.0"/target="20.16.0"/' remote/.npmrc
+    touch .stamp_patched
+  fi
+
   export NODE_OPTIONS="--max-old-space-size=8192"
 
   [ -f .stamp_monaco-compile-check ] || yarn monaco-compile-check
