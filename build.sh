@@ -8,19 +8,26 @@ set -ex
 if [[ "${SHOULD_BUILD}" == "yes" ]]; then
   echo "MS_COMMIT=\"${MS_COMMIT}\""
 
-  . prepare_vscode.sh
+  [ -f .stamp_prepared ] || . prepare_vscode.sh
+  touch .stamp_prepared
 
   cd vscode || { echo "'vscode' dir not found"; exit 1; }
 
   export NODE_OPTIONS="--max-old-space-size=8192"
 
-  yarn monaco-compile-check
-  yarn valid-layers-check
+  [ -f .stamp_monaco-compile-check ] || yarn monaco-compile-check
+  touch .stamp_monaco-compile-check
+  [ -f .stamp_valid-layers-check ] || yarn valid-layers-check
+  touch .stamp_valid-layers-check
 
-  yarn gulp compile-build
-  yarn gulp compile-extension-media
-  yarn gulp compile-extensions-build
-  yarn gulp minify-vscode
+  [ -f .stamp_compile-build ] || yarn gulp compile-build
+  touch .stamp_compile-build
+  [ -f .stamp_compile-extension-media ] || yarn gulp compile-extension-media
+  touch .stamp_compile-extension-media
+  [ -f .stamp_compile-extensions-build ] || yarn gulp compile-extensions-build
+  touch .stamp_compile-extensions-build
+  [ -f .stamp_minify-vscode ] || yarn gulp minify-vscode
+  touch .stamp_minify-vscode
 
   if [[ "${OS_NAME}" == "osx" ]]; then
     yarn gulp "vscode-darwin-${VSCODE_ARCH}-min-ci"

@@ -102,7 +102,7 @@ else
 fi
 
 if [[ "${SKIP_BUILD}" == "no" ]]; then
-  if [[ "${SKIP_SOURCE}" != "no" ]]; then
+  if [[ "${SKIP_SOURCE}" != "no" && ! -f .stamp_prepared ]]; then
     cd vscode || { echo "'vscode' dir not found"; exit 1; }
 
     git add .
