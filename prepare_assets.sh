@@ -166,7 +166,7 @@ else
   cd ..
 
   if [[ "${CI_BUILD}" == "no" ]]; then
-    . ./stores/snapcraft/build.sh
+    [ -f ./stores/snapcraft/build.sh ] && . ./stores/snapcraft/build.sh
 
     if [[ "${SKIP_ASSETS}" == "no" ]]; then
       mv stores/snapcraft/build/*.snap assets/
